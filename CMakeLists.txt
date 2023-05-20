@@ -1,10 +1,18 @@
+# Avoid warning about DOWNLOAD_EXTRACT_TIMESTAMP in CMake 3.24:
+if (CMAKE_VERSION VERSION_GREATER_EQUAL "3.24.0")
+  cmake_policy(SET CMP0135 NEW)
+endif()
+
 cmake_minimum_required(VERSION 3.12)
 project(Boost-CMake)
 
 option(BOOST_DISABLE_TESTS "Do not build test targets, even if building standalone" OFF)
 
-set(BOOST_URL "https://boostorg.jfrog.io/artifactory/main/release/${BOOST_REQUESTED_VERSION}/source/boost_1_82_0.tar.bz2" CACHE STRING "Boost download URL")
-set(BOOST_URL_SHA256 "a6e1ab9b0860e6a2881dd7b21fe9f737a095e5f33a3a874afc6a345228597ee6" CACHE STRING "Boost download URL SHA256 checksum")
+set(BOOST_VERSION_UNDERSCORE ${BOOST_REQUESTED_VERSION})
+string(REPLACE "." "_" BOOST_VERSION_UNDERSCORE ${BOOST_VERSION_UNDERSCORE})
+
+set(BOOST_URL "https://boostorg.jfrog.io/artifactory/main/release/${BOOST_REQUESTED_VERSION}/source/boost_${BOOST_VERSION_UNDERSCORE}.tar.bz2" CACHE STRING "Boost download URL")
+set(BOOST_URL_SHA256 "${BOOST_VERSION_SHA256}" CACHE STRING "Boost download URL SHA256 checksum")
 
 include(FetchContent)
 FetchContent_Declare(
@@ -47,30 +55,30 @@ set(BOOST_LIBS_OPTIONAL
   # Compiled libs
   atomic
   chrono
-  container
-  context
-  coroutine
+  #container
+  #context
+  #coroutine
   #date_time
-  exception
+  #exception
   #fiber
   #filesystem
   #graph
-  iostreams
+  #iostreams
   #locale
   #log
-  math
+  #math
   #mpi
   #graph_parallel # depends on mpi, so needs to be put after it
-  program_options
+  #program_options
   #python # complex module
-  random
+  #random
   #regex
   serialization
   system
   #test
   thread
   #timer
-  type_erasure
+  #type_erasure
   #wave
   CACHE STRING "Boost libs to be compiled"
 )
